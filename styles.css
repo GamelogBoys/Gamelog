@@ -1,0 +1,59 @@
+            /* Custom styles for the dark theme and canvas background */
+            body {
+                background-color: #0d1117; /* Deep Charcoal Background */
+                overflow-x: hidden; /* Prevent scrolling caused by canvas resizing */
+                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            }
+                
+            #codeCanvas {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: -1; /* Place it behind the main content */
+                pointer-events: none; /* Ensure the canvas doesn't block clicks */
+            }
+
+            .content-card {
+                z-index: 10;
+                background-color: rgba(30, 41, 59, 0.92); /* Dark Blue/Gray with slight transparency */
+                backdrop-filter: blur(10px); /* Blur the code behind the card for readability */
+                border: 1px solid rgba(75, 85, 99, 0.5); /* Subtle border */
+            }
+            
+            .glowing-profile {
+                /* Custom box-shadow to simulate a subtle, professional green glow */
+                box-shadow:
+                    0 0 0 8px rgba(72, 187, 120, 0.15),
+                    0 0 15px rgba(72, 187, 120, 0.5),
+                    0 0 25px rgba(72, 187, 120, 0.3);
+                transition: box-shadow 0.3s ease;
+            }
+
+            .glowing-profile:hover {
+                /* Slight emphasis on hover */
+                box-shadow:
+                    0 0 0 10px rgba(72, 187, 120, 0.2),
+                    0 0 20px rgba(72, 187, 120, 0.8),
+                    0 0 35px rgba(72, 187, 120, 0.5);
+            }
+            .project-card {
+                z-index: 10;
+                background-color: rgba(30, 41, 59, 0.9); /* Dark Blue/Gray with high opacity */
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(75, 85, 99, 0.5);
+            }
+            .highlight-effect {
+                /* Mimics hover:-translate-y-2 */
+                transform: translateY(-8px) !important;
+            }
+
+            /* Specific shadows for the highlight effect to match card colors, used by JS search */
+            #project-alpha.highlight-effect {
+                box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.5), 0 10px 10px -5px rgba(16, 185, 129, 0.2) !important;
+            }
+            #project-securechat.highlight-effect {
+                box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.5), 0 10px 10px -5px rgba(37, 99, 235, 0.2) !important;
+            }
+            #project-dataviz.highlight-effect {
+                box-shadow: 0 20px 25px -5px rgba(234, 179, 8, 0.5), 0 10px 10px -5px rgba(234, 179, 8, 0.2) !important;
+            }
