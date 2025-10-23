@@ -112,3 +112,66 @@
             window.onload = function () {
                 draw();
             }
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // --- TITLE BLINKING LOGIC ---
+        const originalTitle = "🌎Swapnil's Beasts";
+        const blinkingMessage = "🌎 Swapnil Dev 🌎";
+        let isOriginalTitle = true;
+        let blinkInterval;
+        
+        function startTitleBlinking() {
+            // Clear any existing interval just in case
+            if (blinkInterval) {
+                clearInterval(blinkInterval);
+            }
+
+            blinkInterval = setInterval(() => {
+                if (isOriginalTitle) {
+                    document.title = blinkingMessage;
+                } else {
+                    document.title = originalTitle;
+                }
+                isOriginalTitle = !isOriginalTitle;
+            }, 500); // Toggle every 500 milliseconds (0.5 seconds)
+        }
+
+        // Start the blinking effect immediately when the script runs
+        startTitleBlinking();
+
+        // --- END TITLE BLINKING LOGIC ---
+
+
+        /**
+         * Simulates an action when the "Hire Me" link is clicked.
+         * In a real app, this would scroll to a contact form or open a modal.
+         */
+        document.getElementById('hireMeLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            showMessage('Awesome! Contact details are loading...', 'bg-indigo-500 text-white');
+            // In a real application, you'd add logic here (e.g., smooth scroll, open contact form)
+        });
+
+        /**
+         * Helper function to display temporary messages instead of using alert().
+         */
+        function showMessage(message, classes) {
+            const box = document.getElementById('messageBox');
+            box.textContent = message;
+            box.className = `fixed top-0 left-1/2 -translate-x-1/2 mt-4 p-4 rounded-lg shadow-2xl transition-all duration-500 transform z-50 ${classes}`;
+            
+            // Show the box
+            setTimeout(() => {
+                box.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+                box.classList.add('opacity-100', 'scale-100');
+            }, 50);
+
+            // Hide the box after 3 seconds
+            setTimeout(() => {
+                box.classList.remove('opacity-100', 'scale-100');
+                box.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+            }, 3000);
+        }
