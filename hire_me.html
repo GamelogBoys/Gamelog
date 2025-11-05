@@ -6,10 +6,226 @@
     <title>Loading Portfolio...</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        
+                    /* Custom styles for the dark theme and canvas background */
+            body {
+                background-color: #0d1117; /* Deep Charcoal Background */
+                overflow-x: hidden; /* Prevent scrolling caused by canvas resizing */
+                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            }
+                
+            #codeCanvas {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: -1; /* Place it behind the main content */
+                pointer-events: none; /* Ensure the canvas doesn't block clicks */
+            }
+
+            .content-card {
+                z-index: 10;
+                background-color: rgba(30, 41, 59, 0.92); /* Dark Blue/Gray with slight transparency */
+                backdrop-filter: blur(10px); /* Blur the code behind the card for readability */
+                border: 1px solid rgba(75, 85, 99, 0.5); /* Subtle border */
+            }
+            
+            .glowing-profile {
+                /* Custom box-shadow to simulate a subtle, professional green glow */
+                box-shadow:
+                    0 0 0 8px rgba(72, 187, 120, 0.15),
+                    0 0 15px rgba(72, 187, 120, 0.5),
+                    0 0 25px rgba(72, 187, 120, 0.3);
+                transition: box-shadow 0.3s ease;
+            }
+
+            .glowing-profile:hover {
+                /* Slight emphasis on hover */
+                box-shadow:
+                    0 0 0 10px rgba(72, 187, 120, 0.2),
+                    0 0 20px rgba(72, 187, 120, 0.8),
+                    0 0 35px rgba(72, 187, 120, 0.5);
+            }
+            .project-card {
+                z-index: 10;
+                background-color: rgba(30, 41, 59, 0.9); /* Dark Blue/Gray with high opacity */
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(75, 85, 99, 0.5);
+            }
+            .highlight-effect {
+                /* Mimics hover:-translate-y-2 */
+                transform: translateY(-8px) !important;
+            }
+
+            /* Specific shadows for the highlight effect to match card colors, used by JS search */
+            #project-alpha.highlight-effect {
+                box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.5), 0 10px 10px -5px rgba(16, 185, 129, 0.2) !important;
+            }
+            #project-securechat.highlight-effect {
+                box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.5), 0 10px 10px -5px rgba(37, 99, 235, 0.2) !important;
+            }
+            #project-dataviz.highlight-effect {
+                box-shadow: 0 20px 25px -5px rgba(234, 179, 8, 0.5), 0 10px 10px -5px rgba(234, 179, 8, 0.2) !important;
+            }
     </style>
 </head>
 <body class="bg-white h-screen flex flex-col justify-center items-center p-4">
+        <!-- Matrix Rain Canvas Background -->
+        <canvas id="codeCanvas"></canvas>
+        
+        <!-- Navigation Bar -->
+        <nav class="fixed top-0 left-0 right-0 p-4 bg-gray-800/80 backdrop-blur-md shadow-lg z-20">
+            <!-- This container uses flex to keep elements on one line -->
+            <div class="flex items-center justify-between max-w-6xl mx-auto">
+                <!-- Left Side: Logo/Text Links -->
+                <div class="flex items-center space-x-6"> 
+                    <span class="text-xl font-bold text-green-400"><./Hire Me∅></span>
+                    <!-- Navigation links -->
+                    <a href="#" class="text-gray-300 hover:text-green-400 transition hidden sm:block">Home</a>
+                    <a href="#projects" class="text-gray-300 hover:text-green-400 transition hidden sm:block">Project</a>
+                    <a href="#contact" class="text-gray-300 hover:text-green-400 transition hidden sm:block">Contact</a>
+                </div>
+                
+                <!-- Right Side: Search Box and Button -->
+                <div class="flex items-center">
+                    <form id="searchForm" class="flex items-center">
+                    <input type="search" placeholder="🔍Search" class="p-2 text-sm rounded-l-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-green-500 text-white w-24 sm:w-40 transition duration-150" id="searchInput">
+                    <button type="submit" class="p-2 bg-green-600 rounded-r-lg hover:bg-green-700 transition">
+                        <!-- Search Icon (Magnifying Glass) -->
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Header/Profile Section -->
+        <header class="pt-28 pb-8 flex justify-center w-full">
+            <div class="flex flex-col items-center space-y-4">
+                <img 
+                    src="pngtree-programmer-it-developer-png-image_13520483.png" 
+                    alt="Professional Headshot Placeholder" 
+                    class="w-32 h-32 rounded-full object-cover border-4 border-gray-800 glowing-profile"
+                >
+                <h2 class="text-2xl font-semibold text-gray-100">Swapnil Saha, Child Programmer</h2>
+                <p class="text-green-400 text-sm">-- CONNECTED --</p>
+            </div>
+        </header>
+
+        <!-- Main Content: Projects Section -->
+        <main id="projects" class="pb-16 flex flex-col items-center w-full px-4"> 
+        
+            <h3 class="text-3xl font-extrabold mb-10 text-green-400 uppercase tracking-widest">
+                Featured Projects
+            </h3>
+
+            <!-- Project Grid Container -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl w-full">
+            
+                <!-- Project Card 1: Web Calculator Suvo (Now has ID for Search) -->
+                <div id="project-alpha" class="project-card rounded-xl overflow-hidden shadow-xl transform transition duration-300 hover:shadow-green-800/50 hover:-translate-y-2">
+                    <a href="https://suvo-cal.netlify.app/" target="_blank" rel="noopener noreferrer" aria-label="View Project Alpha Dashboard">
+                        <img 
+                            src="https://placehold.co/400x200/48bb78/0d1117?text=Web+Calculator+Suvo" 
+                            alt="Project Alpha Screenshot" 
+                            class="w-full h-48 object-cover border-b border-gray-700 hover:opacity-90 transition duration-300"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x200/48bb78/0d1117?text=Web+Calculator+Suvo';"
+                        >
+                    </a>
+                    <div class="p-6">
+                        <h4 class="text-xl font-semibold mb-2 text-green-300">Web Calculator Suvo</h4>
+                        <p class="text-sm text-gray-400">A realtime calculator specially for iphones to use a calculator without any cost on any of the browser.</p>
+                        <a href="https://suvo-cal.netlify.app/" target="_blank" rel="noopener noreferrer" class="mt-4 inline-block text-sm text-green-500 hover:text-green-400 font-medium">
+                        View Live Project &rarr;
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Card 2: Secure Chat Application (Now has ID for Search) -->
+                <div id="project-securechat" class="project-card rounded-xl overflow-hidden shadow-xl transform transition duration-300 hover:shadow-blue-600/50 hover:-translate-y-2">
+                    <a href="https://secure-chat-app.netlify.app" target="_blank" rel="noopener noreferrer" aria-label="View Secure Chat Application">
+                        <img 
+                            src="https://placehold.co/400x200/38bdf8/0d1117?text=Secure+Chat+App" 
+                            alt="Secure Chat App Screenshot" 
+                            class="w-full h-48 object-cover border-b border-gray-700 hover:opacity-90 transition duration-300"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x200/38bdf8/0d1117?text=Secure+Chat+App';"
+                        >
+                    </a>
+                    <div class="p-6">
+                        <h4 class="text-xl font-semibold mb-2 text-blue-300">Secure Chat Application</h4>
+                        <p class="text-sm text-gray-400">Real-time, end-to-end encrypted messaging platform powered by Firebase Firestore.</p>
+                        <a href="https://secure-chat-app.netlify.app" target="_blank" rel="noopener noreferrer" class="mt-4 inline-block text-sm text-blue-500 hover:text-blue-400 font-medium">
+                            View Live Project &rarr;
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Card 3: Music With Guitar (Now has ID for Search) -->
+                <div id="project-dataviz" class="project-card rounded-xl overflow-hidden shadow-xl transform transition duration-300 hover:shadow-yellow-600/50 hover:-translate-y-2">
+                    <a href="https://musicwithguitar.netlify.app/" target="_blank" rel="noopener noreferrer" aria-label="View Data Visualization Tool">
+                        <img 
+                            src="https://placehold.co/400x200/fbb34e/0d1117?text=Music+With+Guitar" 
+                            alt="Data Visualization Tool Screenshot" 
+                            class="w-full h-48 object-cover border-b border-gray-700 hover:opacity-90 transition duration-300"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x200/fbb34e/0d1117?text=Music+With+Guitar';"
+                        >
+                    </a>
+                    <div class="p-6">
+                        <h4 class="text-xl font-semibold mb-2 text-yellow-300">Music With Guitar</h4>
+                        <p class="text-sm text-gray-400">Shop For Interactive and Cool guitars with all new and different feautures with free of accesories.</p>
+                        <a href="https://musicwithguitar.netlify.app/" target="_blank" rel="noopener noreferrer" class="mt-4 inline-block text-sm text-yellow-500 hover:text-yellow-400 font-medium">
+                            View Live Project &rarr;
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+        
+        <!-- Call to Action Section -->
+        <section class="py-16 flex justify-center w-full px-4">
+            <div class="max-w-xl text-center project-card p-10 rounded-2xl">
+                <h3 class="text-3xl font-extrabold text-green-400 mb-6">Want to Post your one.</h3>
+                <p class="text-gray-400 mb-8">
+                    Ready to collaborate on your next technical challenge? Let's discuss your project goals.
+                </p>
+                <a href="hire_me.html" class="px-10 py-4 bg-green-600 text-white font-semibold text-lg rounded-lg shadow-xl shadow-green-700/50 hover:bg-green-700 transition duration-300 transform hover:scale-105 inline-block">
+                    Hire Me
+                </a>
+            </div>
+        </section>
+
+        <!-- FOOTER SECTION -->
+        <footer id="contact" class="bg-gray-900/90 border-t border-gray-700 mt-12 py-12 px-4 w-full">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-start space-y-8 md:space-y-0">
+            
+                <!-- Left Side: Heading & Branding -->
+                <div class="flex flex-col space-y-2">
+                    <span class="text-2xl font-bold text-green-400"><./Swapnil Develops></span>
+                    <p class="text-gray-400 max-w-xs">Building robust systems where security meets innovation for global clients.</p>
+                </div>
+
+                <!-- Right Side: Contact Details -->
+                <div class="space-y-4">
+                    <h5 class="text-xl font-semibold text-green-400 mb-2">Professional Contact</h5>
+                
+                    <div class="flex items-center space-x-3">
+                        <!-- Email Icon -->
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+                        <span class="text-gray-300">swapnil2013saha@gmail.com</span>
+                    </div>
+                
+                    <div class="flex items-center space-x-3">
+                        <!-- Phone Icon -->
+                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.773-1.548a1 1 0 011.06-.54l4.435.74A1 1 0 0118 16.847V17a1 1 0 01-1 1h-12a1 1 0 01-1-1v-12a1 1 0 011-1z"></path></svg>
+                        <span class="text-gray-300">+91 84202 81608</span>
+                    </div>
+                </div>
+            </div>
+            <div class="max-w-6xl mx-auto mt-8 pt-4 border-t border-gray-800 text-center">
+                <p class="text-sm text-gray-500">
+                    &copy;&trade; 2025 Swapnil Develops. All Rights Reserved.
+                </p>
+            </div>
+        </footer>
     
     
     <script>
@@ -19,7 +235,7 @@
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         // --- TITLE BLINKING LOGIC ---
-        const originalTitle = "Hire Me! | My Portfolio";
+        const originalTitle = "Hire Me! | <./Swapnil Develops>";
         const blinkingMessage = "🔥 HIRE ME NOW! 🔥";
         let isOriginalTitle = true;
         let blinkInterval;
